@@ -1,6 +1,24 @@
 import requests
 import xmltodict
 
+# Request list from GoodReads API
+# Arguments: getReadList( int userId, int bookCount, str list, str sortMethod )
+#   int userId      : GoodReads user ID
+#   int bookCount   : How many books to list. Defaults to 5 with warning
+#   str list        : Which list to
+#   str sortMethod  : Sorting method to us. full documentation of options is available on GoodReads API documentation. Defaults to "date_read" with warning
+# Output:
+# {
+#   bool fail           : True if request failed for any reason
+#   tup  failMessage    : List of failure messages
+#   tup  warningMessages: List of warning messages
+#   int  length         : Length of book list from GoodReads API
+#   int  bookCount      : Length of output book list
+#   str  sortMethod     : Sort method passed to GoodReads API
+#   str  list           : Which list was fetched
+#   int  userId         : Which user id was passed to GoodReads API
+#   dict books          : Raw dictionary of output of list from GoodReads API
+# }
 def getList(userId=None, bookCount=None, list=None, sortMethod=None):
     fail, failMessage, warningMessage = False, [], []
 
