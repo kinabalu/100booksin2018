@@ -11,6 +11,7 @@ routes = [
     Route('/isloggedin', 'GET', isLoggedIn),
 
     # "Log in" - Start session for user, insert into db if not already existent
+    # Only GET for testing, will be POST
     Route('/login', 'GET', logIn),
 ]
 
@@ -26,3 +27,8 @@ app = App(routes=routes)
 #       -List of books in shelf should only be requested from GoodReads after a certain time since last refresh, not every time client fetches
 #   -Create book list parsing function to parse a cleaner list of books, and add reading statistics
 #   -Make methods to set book reading status
+#
+# Flow:
+#   -> Client requests GET:/loggedin
+#   --> If api returns true, client then requests GET:/getread or /gettoread
+#   --> If api returns false, client prompts user for GoodReads id, and uses POST:/login to log user in and create session
