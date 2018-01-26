@@ -1,34 +1,34 @@
 import requests
 import xmltodict
 
+
+
+
+# Consistent error output
+def failOutput(failMessage=None, warningMessage=None):
+    return {
+        "fail": True,
+        "failMessage": failMessage,
+        "warningMessage": warningMessage
+    }
+
+
+
+
 # Request list from GoodReads API
-# Arguments: getReadList( int userId, int bookCount, str list, str sortMethod )
-#   int userId      : GoodReads user ID
-#   int bookCount   : How many books to list. Defaults to 5 with warning
-#   str list        : Which list to
-#   str sortMethod  : Sorting method to us. full documentation of options is available on GoodReads API documentation. Defaults to "date_read" with warning
-# Output:
-# {
-#   bool fail           : True if request failed for any reason
-#   tup  failMessage    : List of failure messages
-#   tup  warningMessages: List of warning messages
-#   int  length         : Length of book list from GoodReads API
-#   int  bookCount      : Length of output book list
-#   str  sortMethod     : Sort method passed to GoodReads API
-#   str  list           : Which list was fetched
-#   int  userId         : Which user id was passed to GoodReads API
-#   dict books          : Raw dictionary of output of list from GoodReads API
-# }
-def getList(userId=None, bookCount=None, list=None, sortMethod=None):
+# Arguments: getReadList( int userId, str list, str sortMethod )
+def getList(userId=None, list=None, sortMethod=None):
     fail, failMessage, warningMessage = False, [], []
+    url = "https://www.goodreads.com/review/list.xml"
+    urlParams = {
+        "key": "MvliPKXB0RGuCSy4wSOdfg",
+        "v": "2",
+        "shelf": list,
+        "sort": sortMethod,
+        "id": userId
+    }
 
-    def failOutput(failMessage=None, warningMessage=None):
-        return {
-            "fail": True,
-            "failMessage": failMessage,
-            "warningMessage": warningMessage
-        }
-
+    # Data validation
     if userId is None:
         fail = True
         failMessage = failMessage + ["No user ID provided", ]
@@ -41,30 +41,15 @@ def getList(userId=None, bookCount=None, list=None, sortMethod=None):
     if sortMethod is None:
         sortMethod = "date_read"
         warningMessage = warningMessage + ['No sort specified, default to date_read', ]
-    if bookCount is None:
-        bookCount = 5
-        warningMessage = warningMessage + ["Book count not provided, default of 5 used", ]
-    else:
-        try:
-            bookCount = int(bookCount)
-        except:
-            bookCount = 5
-            warningMessage = warningMessage + ["Book count invalid, default of 5 used", ]
     if list is None:
         fail = True
         failMessage = failMessage + ["Internal error; list not specified", ]
 
+    # Output failue message if data is invalid
     if fail is True:
         return failOutput(failMessage, warningMessage)
 
-    url = "https://www.goodreads.com/review/list.xml"
-    urlParams = {
-        "key": "MvliPKXB0RGuCSy4wSOdfg",
-        "v": "2",
-        "shelf": list,
-        "sort": sortMethod,
-        "id": userId
-    }
+    # Try requesting API, catch if connection couldn't be opened
     try:
         request = requests.get(url, params=urlParams).text
     except requests.exceptions.RequestException as e:
@@ -72,6 +57,7 @@ def getList(userId=None, bookCount=None, list=None, sortMethod=None):
         failMessage = failMessage + ["Connection to GoodReads could not be made", ]
         return failOutput(failMessage, warningMessage)
     else:
+        # Try parsing XML, catch if data is invalid
         try:
             parsedRequest = xmltodict.parse(request)
         except xmltodict.expat.ExpatError as e:
@@ -79,15 +65,26 @@ def getList(userId=None, bookCount=None, list=None, sortMethod=None):
             failMessage = failMessage + ["GoodReads output corrupted or not authorized", ]
             return failOutput(failMessage, warningMessage)
         else:
+
+            # Catch if user doesn't exist
+            if("error" in parsedRequest):
+                fail = True
+                failMessage = failMessage + ["GoodReads API error: "+parsedRequest["error"], ]
+                return failOutput(failMessage, warningMessage)
+
+            # Default empty list if user doesn't have anything in list
+            response = {}
+            if("review" in parsedRequest["GoodreadsResponse"]["reviews"]):
+                response = parsedRequest["GoodreadsResponse"]["reviews"]["review"]
+
             return {
                 "fail": False,
                 "warningMessage": warningMessage,
-                "length": parsedRequest["GoodreadsResponse"]["reviews"]["@total"],
-                "bookCount": bookCount,
+                "length": int(parsedRequest["GoodreadsResponse"]["reviews"]["@total"]),
                 "sortMethod": sortMethod,
                 "list": list,
                 "userId": userId,
-                "books": parsedRequest["GoodreadsResponse"]["reviews"]["review"]
+                "response": response
             }
 
 
