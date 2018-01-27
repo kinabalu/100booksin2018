@@ -1,44 +1,48 @@
 import psycopg2
-from apistar import typesystem
-
-
+import psycopg2.extras
 
 
 # Database operations wrapper with built in statements
 class Database(object):
-    database = "books"
-    host = "172.17.0.2"
-    user = "postgres"
-    password = "police_lama"
+    database = 'books'
+    host = '172.17.0.3'
+    user = 'postgres'
+    password = 'police_lama'
     bookCountList = [5, 10, 15, 20, 25, 30, 35]
-
-    queries = {}
-
+    queries = {
+        "userExists": 'SELECT grid FROM users WHERE grid = %s',
+        "createUser": 'INSERT INTO users ( grid ) VALUES ( %s )',
+        "setReadStatus": 'UPDATE books SET pages_read = %s WHERE bookid = %s AND grid = %s'
+    }
     connection = None
+
     def __init__(self):
-        self.connection = psycopg2.connect(database=self.database, host=self.host, user=self.user, password=self.password)
+        self.connection = psycopg2.connect(database=self.database, host=self.host, user=self.user,
+                                           password=self.password)
         self.connection.autocommit = True
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-    def getAllUsers(self):
-        self.cursor.execute("SELECT * FROM users;")
-        return self.cursor.fetchall()
-
-    def userExists(self, grid: typesystem.Integer=None):
-        if(grid is None):
-            return false
+    def userExists(self, grid):
         grid = int(str(grid))
-        self.cursor.execute("SELECT grid FROM users WHERE grid = %s", (grid, ))
-        return self.cursor.fetchone() # is not None -- to return boolean if user exists
+        self.cursor.execute(self.queries["userExists"], (grid,))
+        fetch = self.cursor.fetchone()
+        if fetch is None:
+            return False
+        else:
+            return True
 
+    def createUser(self, grid):
+        try:
+            self.cursor.execute(self.queries["createUser"], (grid,))
+        except:
+            return False
 
-    def createUser(self, grid: typesystem.Integer=None):
-        if (grid is None):
-            return {"message": "Not all data provided to internal createUser function call"}
+        return True
 
-        userExists = self.userExists(grid)
-        if(userExists is not None):
-            # User exists already
-            return {"message":"User already exists"}
-        #self.cursor.execute("INSERT INTO users ( grid ) VALUES ( %s )", ( grid, ))
-        return {"message":"End"}
+    def setReadStatus(self, grid=None, bookId=None, pagesRead=None):
+        assert isinstance(grid, int)
+        assert isinstance(bookId, int)
+        assert isinstance(pagesRead, int)
+
+        self.cursor.execute(self.queries["setReadStatus"],
+                            (pagesRead, bookId, grid))

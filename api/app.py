@@ -1,6 +1,6 @@
 from apistar import http, Route
 from apistar.frameworks.wsgi import WSGIApp as App
-from project.views import getReadList, getToReadList, logIn, isLoggedIn
+from project.views import getReadList, getToReadList, logIn, isLoggedIn, setReadStatus, logOut
 
 routes = [
     # Get lists
@@ -13,20 +13,20 @@ routes = [
     # "Log in" - Start session for user, insert into db if not already existent
     # Only GET for testing, will be POST
     Route('/login', 'GET', logIn),
+
+    # "Log out" end session - frontend will prompt for credentials again after this
+    Route('/logout', 'GET', logOut),
+
+    # Update pages read for specific book
+    Route('/pagesread', 'GET', setReadStatus)
 ]
 
 app = App(routes=routes)
 
-#------------------#
+# ------------------#
 # To-do
-#------------------#
-#   -Make output consistent
-#   -Validate that user id is a valid user before creating row and session
-#   -Store book information on database
-#       -Populate books in database on new user login
-#       -List of books in shelf should only be requested from GoodReads after a certain time since last refresh, not every time client fetches
-#   -Create book list parsing function to parse a cleaner list of books, and add reading statistics
-#   -Make methods to set book reading status
+# ------------------#
+#   -Write thorough unit testing
 #
 # Flow:
 #   -> Client requests GET:/loggedin
