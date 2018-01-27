@@ -5,7 +5,7 @@ import psycopg2.extras
 # Database operations wrapper with built in statements
 class Database(object):
     database = 'books'
-    host = '172.17.0.3'
+    host = '172.17.0.2'
     user = 'postgres'
     password = 'police_lama'
     bookCountList = [5, 10, 15, 20, 25, 30, 35]
@@ -23,6 +23,8 @@ class Database(object):
         self.cursor = self.connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     def userExists(self, grid):
+        assert isinstance(grid, int)
+
         grid = int(str(grid))
         self.cursor.execute(self.queries["userExists"], (grid,))
         fetch = self.cursor.fetchone()
@@ -32,6 +34,7 @@ class Database(object):
             return True
 
     def createUser(self, grid):
+        assert isinstance(grid, int)
         try:
             self.cursor.execute(self.queries["createUser"], (grid,))
         except:

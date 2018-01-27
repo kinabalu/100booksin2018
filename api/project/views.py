@@ -25,21 +25,21 @@ def setReadStatus(session: http.Session, pagesread=None, bookid=None):
 
 
 #  Get list from the "read" shelf
-def getReadList(session: http.Session, sortMethod=None):
+def getReadList(session: http.Session, sortmethod=None):
     """Call getList with and supply the "read" list and return result"""
     if "loggedin" in session:
         grid = session["grid"]
-        return fetchList(userId=grid, list="read", sortMethod=sortMethod)
+        return fetchList(grid=grid, list="read", sortMethod=sortmethod)
     else:
         return outputFailure(failMessage="No UID", message="getReadList, not logged in")
 
 
 # Get list from the "to-read" shelf
-def getToReadList(session: http.Session, sortMethod=None):
+def getToReadList(session: http.Session, sortmethod=None):
     """Call getList with and supply the "to-read" list and return result"""
     if "loggedin" in session:
         grid = session["grid"]
-        return fetchList(userId=grid, list="to-read", sortMethod=sortMethod)
+        return fetchList(grid=grid, list="to-read", sortMethod=sortmethod)
     else:
         return outputFailure(failMessage="No UID")
 

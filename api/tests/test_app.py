@@ -10,16 +10,16 @@ def test_getReadList():
     assert test2["fail"] == True
 
     # Test that not providing userId results in an error
-    test1 = getReadList(bookCount=7, sortMethod="date_read")
+    test1 = getReadList(bookCount=7, sortmethod="date_read")
     assert test1["fail"] == True
     assert test1["failMessage"] == ["No user ID provided", ]
     # Test that providing invalid userId results in an error
-    test1 = getReadList(userId="hunter2", bookCount=7, sortMethod="date_read")
+    test1 = getReadList(userId="hunter2", bookCount=7, sortmethod="date_read")
     assert test1["fail"] == True
     assert test1["failMessage"] == ["User ID invalid", ]
 
     # Test that not providing book count results in a warning, and no error
-    test1 = getReadList(userId=76836596, sortMethod="date_read")
+    test1 = getReadList(userId=76836596, sortmethod="date_read")
     assert test1["fail"] == False
     assert test1["warningMessage"] == ["Book count not provided, default of 5 used", ]
 
@@ -37,7 +37,7 @@ def test_getReadList():
     assert test4["warningMessage"] == ['No sort specified, default to date_read', 'Book count not provided, default of 5 used']
 
     # Test that providing all data does not result in any errors or warnings, and that data is accurate
-    test5 = getReadList(userId=76836596, bookCount="7", sortMethod="date_read")
+    test5 = getReadList(userId=76836596, bookCount="7", sortmethod="date_read")
     assert test5["fail"] == False
     assert test5["userId"] == 76836596
     assert test5["bookCount"] == 7
@@ -54,17 +54,17 @@ def test_getToReadList():
     assert test2["fail"] == True
 
     # Test that not providing userId results in an error
-    test1 = getToReadList(bookCount=7, sortMethod="date_read")
+    test1 = getToReadList(bookCount=7, sortmethod="date_read")
     assert test1["fail"] == True
     assert test1["failMessage"] == ["No user ID provided", ]
 
     # Test that providing invalid userId results in an error
-    test1 = getToReadList(userId="hunter2", bookCount=7, sortMethod="date_read")
+    test1 = getToReadList(userId="hunter2", bookCount=7, sortmethod="date_read")
     assert test1["fail"] == True
     assert test1["failMessage"] == ["User ID invalid", ]
 
     # Test that not providing book count results in a warning, and no error
-    test1 = getToReadList(userId=76836596, sortMethod="date_read")
+    test1 = getToReadList(userId=76836596, sortmethod="date_read")
     assert test1["fail"] == False
     assert test1["warningMessage"] == ["Book count not provided, default of 5 used", ]
 
@@ -82,7 +82,7 @@ def test_getToReadList():
     assert test4["warningMessage"] == ['No sort specified, default to date_read', 'Book count not provided, default of 5 used']
 
     # Test that providing all data does not result in any errors or warnings, and that data is accurate
-    test5 = getToReadList(userId=76836596, bookCount="7", sortMethod="date_read")
+    test5 = getToReadList(userId=76836596, bookCount="7", sortmethod="date_read")
     assert test5["fail"] == False
     assert test5["userId"] == 76836596
     assert test5["bookCount"] == 7

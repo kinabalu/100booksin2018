@@ -49,10 +49,17 @@ def parseBookList(bookList, grid, shelf):
 
 # Request list from GoodReads API
 # Arguments: getReadList( int userId, str list, str sortMethod )
-def fetchList(userId, list, sortMethod):
+def fetchList(grid, list, sortMethod=None):
+    assert isinstance(grid, int)
+    assert isinstance(list, str)
+    if(sortMethod is not None):
+        assert isinstance(sortMethod, str)
+    else:
+        sortMethod = "date_read"
+
     warningMessage = []
     url = "https://www.goodreads.com/review/list.xml"
-    urlParams = {'key': "MvliPKXB0RGuCSy4wSOdfg", 'v': "2", 'shelf': list, 'sort': sortMethod, 'id': userId}
+    urlParams = {'key': "MvliPKXB0RGuCSy4wSOdfg", 'v': "2", 'shelf': list, 'sort': sortMethod, 'id': grid}
 
     # Try requesting API, catch if connection couldn't be opened
     try:
@@ -77,5 +84,5 @@ def fetchList(userId, list, sortMethod):
             if ("review" in parsedRequest["GoodreadsResponse"]["reviews"]):
                 response = parsedRequest["GoodreadsResponse"]["reviews"]["review"]
 
-            re = parseBookList(response, grid=userId, shelf=list)
+            re = parseBookList(response, grid=grid, shelf=list)
             return outputSuccess(results=re, warningMessage=warningMessage)
