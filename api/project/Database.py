@@ -5,7 +5,7 @@ import psycopg2.extras
 # Database operations wrapper with built in statements
 class Database(object):
     database = 'books'
-    host = '172.17.0.2'
+    host = '172.17.0.3'
     user = 'postgres'
     password = 'police_lama'
     bookCountList = [5, 10, 15, 20, 25, 30, 35]
