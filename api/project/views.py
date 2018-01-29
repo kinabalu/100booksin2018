@@ -19,6 +19,7 @@ def setReadStatus(session: http.Session, pagesread=None, bookid=None):
         grid = session["grid"]
         connection = Database()
         connection.setReadStatus(grid=grid, pagesRead=pagesread, bookId=bookid)
+        connection.close()
         return outputSuccess()
     else:
         return outputFailure(failMessage="No UID")
@@ -61,7 +62,7 @@ def logIn(session: http.Session, grid=None):
         already = False
         if (not connection.createUser(grid=grid)):
             return outputFailure(failMessage="Failed to create user")
-
+    connection.close()
     session["loggedin"] = True
     session["grid"] = grid
     return outputSuccess(results={

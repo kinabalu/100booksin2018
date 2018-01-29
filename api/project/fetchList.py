@@ -44,6 +44,7 @@ def parseBookList(bookList, grid, shelf):
 
         parsedList[thisBook["title_without_series"]] = bookData
 
+    connection.close()
     return parsedList
 
 

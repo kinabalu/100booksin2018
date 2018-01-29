@@ -49,3 +49,5 @@ class Database(object):
 
         self.cursor.execute(self.queries["setReadStatus"],
                             (pagesRead, bookId, grid))
+    def close(self):
+        self.connection.close()
