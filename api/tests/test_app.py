@@ -1,12 +1,14 @@
 from apistar.test import TestClient
 from app import app
 
+
 def _getClientData(url=None):
-    if(url is not None):
+    if (url is not None):
         client = TestClient(app)
         response = client.get(url)
         return response.json()
     return True
+
 
 def test_GetLists():
     # Test that requesting "read" list without logging in results in error
@@ -16,6 +18,7 @@ def test_GetLists():
     # Test that requesting "to-read" list without logging in results in error
     test2 = _getClientData("/gettoread")
     assert test2["fail"] == True
+
 
 def test_login(url=None):
     # Test that logging in without UID results in error
@@ -31,9 +34,6 @@ def test_login(url=None):
     # Test that logging in with valid UID results in no error
     test5 = _getClientData("/login?grid=234567")
     assert test5["fail"] == False
-
-
-
 
 # Test that getting list "read" works now that user is logged in
 # --- Can't get sessions working with TestClient
