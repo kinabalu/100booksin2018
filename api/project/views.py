@@ -5,48 +5,46 @@ from .Output import outputTrue, outputFalse, outputFailure, outputSuccess
 
 
 # Set reading status of book
-def setReadStatus(session: http.Session, pagesread=None, bookid=None):
-    if (pagesread is None) or (bookid is None):
+def setReadStatus(pagesread=None, bookid=None, grid=None):
+    if (pagesread is None) or (bookid is None) or (grid is None):
         # return {"grid": "Must supply pages read, and book id."}
-        return outputFailure(failMessage="Must supply pages read, and book id.")
+        return outputFailure(failMessage="Must supply pages read, GoodReads ID, and book id.")
     try:
         pagesread = int(pagesread)
         bookid = int(bookid)
     except:
         return outputFailure(failMessage="GoodReads ID and book ID must be valid numbers.")
 
-    if "loggedin" in session:
-        grid = session["grid"]
-        connection = Database()
-        connection.setReadStatus(grid=grid, pagesRead=pagesread, bookId=bookid)
-        connection.close()
-        return outputSuccess()
-    else:
-        return outputFailure(failMessage="No UID")
+    connection = Database()
+    connection.setReadStatus(grid=grid, pagesRead=pagesread, bookId=bookid)
+    connection.close()
+    return outputSuccess()
 
 
 #  Get list from the "read" shelf
-def getReadList(session: http.Session, sortmethod=None):
+def getReadList(sortmethod=None, grid=None):
     """Call getList with and supply the "read" list and return result"""
-    if "loggedin" in session:
-        grid = session["grid"]
-        return fetchList(grid=grid, list="read", sortMethod=sortmethod)
-    else:
-        return outputFailure(failMessage="No UID", message="getReadList, not logged in")
+    if(isinstance(grid, str)):
+        try:
+            grid = int(grid)
+        except:
+            return outputFailure(failMessage="GoodReads ID must be valid integer")
+    return fetchList(grid=grid, list="read", sortMethod=sortmethod)
 
 
 # Get list from the "to-read" shelf
-def getToReadList(session: http.Session, sortmethod=None):
+def getToReadList(sortmethod=None, grid=None):
     """Call getList with and supply the "to-read" list and return result"""
-    if "loggedin" in session:
-        grid = session["grid"]
-        return fetchList(grid=grid, list="to-read", sortMethod=sortmethod)
-    else:
-        return outputFailure(failMessage="No UID")
+    if (isinstance(grid, str)):
+        try:
+            grid = int(grid)
+        except:
+            return outputFailure(failMessage="GoodReads ID must be valid integer")
+    return fetchList(grid=grid, list="to-read", sortMethod=sortmethod)
 
 
 # Login user
-def logIn(session: http.Session, grid=None):
+def logIn(grid=None):
     if grid is None:
         return outputFailure(failMessage="Must supply GoodReads ID")
 
@@ -63,26 +61,7 @@ def logIn(session: http.Session, grid=None):
         if (not connection.createUser(grid=grid)):
             return outputFailure(failMessage="Failed to create user")
     connection.close()
-    session["loggedin"] = True
-    session["grid"] = grid
     return outputSuccess(results={
         "grid": grid,
         "already_created": already
     })
-
-
-# Request if user is already logged in
-def isLoggedIn(session: http.Session):
-    if "loggedin" in session:
-        return outputTrue()
-    return outputFalse()
-
-
-# Log user out
-def logOut(session: http.Session):
-    if "loggedin" in session:
-        del session["loggedin"]
-        del session["grid"]
-        return outputSuccess(message="Logged out.")
-    else:
-        return outputFailure(failMessage='Not logged in')

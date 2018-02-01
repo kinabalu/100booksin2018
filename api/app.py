@@ -1,21 +1,16 @@
 from apistar import http, Route
 from apistar.frameworks.wsgi import WSGIApp as App
-from project.views import getReadList, getToReadList, logIn, isLoggedIn, setReadStatus, logOut
+from project.views import getReadList, getToReadList, logIn, setReadStatus
 
 routes = [
     # Get lists
     Route('/getread', 'GET', getReadList),
     Route('/gettoread', 'GET', getToReadList),
 
-    # Test if user is already logged in
-    Route('/isloggedin', 'GET', isLoggedIn),
-
-    # "Log in" - Start session for user, insert into db if not already existent
-    # Only GET for testing, will be POST
-    Route('/login', 'GET', logIn),
-
-    # "Log out" end session - frontend will prompt for credentials again after this
-    Route('/logout', 'GET', logOut),
+    # Old methods relying on session
+    #Route('/isloggedin', 'GET', isLoggedIn),
+    #Route('/login', 'GET', logIn),
+    #Route('/logout', 'GET', logOut),
 
     # Update pages read for specific book
     Route('/pagesread', 'GET', setReadStatus)

@@ -6,7 +6,7 @@ from .Output import outputFailure, outputSuccess
 
 def parseBookList(bookList, grid, shelf):
     connection = Database()
-    parsedList = {}
+    parsedList = []
     for book in bookList:
         thisBook = book["book"]
         bookData = {
@@ -42,7 +42,7 @@ def parseBookList(bookList, grid, shelf):
             bookData["pages_read"] = int(result["pages_read"])
             bookData["fetched"] = False
 
-        parsedList[thisBook["title_without_series"]] = bookData
+        parsedList.append(bookData)
 
     connection.close()
     return parsedList
@@ -51,14 +51,15 @@ def parseBookList(bookList, grid, shelf):
 # Request list from GoodReads API
 # Arguments: getReadList( int userId, str list, str sortMethod )
 def fetchList(grid, list, sortMethod=None):
-    assert isinstance(grid, int)
-    assert isinstance(list, str)
+    #assert isinstance(grid, int)
+    #assert isinstance(list, str)*/
     if(sortMethod is not None):
         assert isinstance(sortMethod, str)
     else:
         sortMethod = "date_read"
 
     warningMessage = []
+    # https://www.goodreads.com/review/list.xml?key=MvliPKXB0RGuCSy4wSOdfg&v=2&shelf=read&sort=date_read&id=76836596
     url = "https://www.goodreads.com/review/list.xml"
     urlParams = {'key': "MvliPKXB0RGuCSy4wSOdfg", 'v': "2", 'shelf': list, 'sort': sortMethod, 'id': grid}
 
@@ -73,7 +74,7 @@ def fetchList(grid, list, sortMethod=None):
             parsedRequest = xmltodict.parse(request)
         except xmltodict.expat.ExpatError as e:
             return outputFailure(failMessage="GoodReads output corrupted or not authorized",
-                                 warningMessage=warningMessage)
+                                 warningMessage=warningMessage, results=request)
         else:
             # Catch if API sends error, such as user not existing
             if ("error" in parsedRequest):
