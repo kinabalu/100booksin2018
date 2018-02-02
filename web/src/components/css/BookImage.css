@@ -1,0 +1,12 @@
+:local(.BookImage){
+    height: 180px; /*150, 200*/
+    width: 117px; /*98, 130*/
+}
+:local(.BookImageWrap){
+    float: left;
+    display: inline;
+    margin: 4px; /* Top and bottom margin of 4px, left and right margin set to auto */
+    margin-bottom: 0px;
+    /*width: 20%;*/
+    grid-area: image;
+}

@@ -12,41 +12,28 @@ class Home extends Component {
         }
     }
     componentDidMount(){
-        fetch("http://192.168.99.100:8080/isloggedin")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        isLoggedIn: result.result
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: false,
-                        error: true
-                    });
-                }
-            );
+        // Check to see if cookie exists for user login
+        // Set isLoggedIn to true
+        // Set isLoaded to true
+        // Set grid to goodreads user id
+        this.setState({
+            isLoaded: true,
+            isLoggedIn: true,
+            grid: 76836596
+        });
     }
     render() {
         var { error, isLoaded, isLoggedIn } = this.state
 
-        if(false){
-            isLoaded = true;
-            isLoggedIn = true;
-        }
-
         if(error){
             console.log(isLoggedIn);
-            return <div class='error'>Error in fetch</div>
+            return <div className='error'>Error in fetch</div>
         } else if(!isLoaded){
-            return <div class='waiting'>Loading...</div>
+            return <div className='waiting'>Loading...</div>
         } else {
             if(isLoggedIn){
-                console.log("Logged in");
                 return (
-                    <ListView />
+                    <ListView grid={this.state.grid} />
                 );
             } else {
                 console.log("Not logged in");

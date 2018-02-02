@@ -1,0 +1,20 @@
+:local(.ProgressBar){
+    grid-area: progress;
+    width: 100%;
+    height: 100%;
+    background-color: navy;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+:local(.ProgressMarker){
+    color: green;
+    height: 100%;
+    background-color: yellow;
+    float: left;
+}
+:local(.ProgressPercent){
+    color: #fff;
+    float: right;
+    height: 100%;
+    padding: 6px;
+}

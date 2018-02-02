@@ -1,0 +1,15 @@
+:local(.Book){
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    /*height: 188px;*/
+}
+
+:local(.BookLayout){
+    display: grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 0px;
+    grid-template-columns: 117px 3fr;
+    grid-template-rows: 6fr 30px;
+    grid-template-areas: "image content" "progress progress";
+}

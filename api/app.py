@@ -1,19 +1,19 @@
-from apistar import http, Route
+from apistar import Route
 from apistar.frameworks.wsgi import WSGIApp as App
-from project.views import getReadList, getToReadList, logIn, setReadStatus
+from project.views import setReadStatus, getList, logIn, tokenValid
 
 routes = [
-    # Get lists
-    Route('/getread', 'GET', getReadList),
-    Route('/gettoread', 'GET', getToReadList),
+    # Get shelf lists
+    Route("/shelf/{token}/{listName}/", "GET", getList),
 
-    # Old methods relying on session
-    #Route('/isloggedin', 'GET', isLoggedIn),
-    #Route('/login', 'GET', logIn),
-    #Route('/logout', 'GET', logOut),
+    # Check user into database -- will be POST
+    Route("/user/{grid}/", "GET", logIn),
+
+    # Check if token is valid
+    Route("/token/{token}/", "GET", tokenValid),
 
     # Update pages read for specific book
-    Route('/pagesread', 'GET', setReadStatus)
+    Route('/pagesread/{token}/{bookid}/{pagesread}/', 'GET', setReadStatus)
 ]
 
 app = App(routes=routes)
@@ -21,9 +21,4 @@ app = App(routes=routes)
 # ------------------#
 # To-do
 # ------------------#
-#   -Write thorough unit testing
-#
-# Flow:
-#   -> Client requests GET:/loggedin
-#   --> If api returns true, client then requests GET:/getread or /gettoread
-#   --> If api returns false, client prompts user for GoodReads id, and uses POST:/login to log user in and create session
+#   -Write thorough unit testings

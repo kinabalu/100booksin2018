@@ -1,13 +1,26 @@
-from apistar import http
-from .fetchList import fetchList
-from .Database import Database
-from .Output import outputTrue, outputFalse, outputFailure, outputSuccess
+from .fetchlist import fetchList
+from .database import Database
+from .output import outputTrue, outputFalse, outputFailure, outputSuccess
 
 
-# Set reading status of book
-def setReadStatus(pagesread=None, bookid=None, grid=None):
-    if (pagesread is None) or (bookid is None) or (grid is None):
-        # return {"grid": "Must supply pages read, and book id."}
+def getList(token=None, listName=None):
+    # Get list of books on a shelf
+
+    if (token is None) or (listName is None):
+        return outputFailure(failMessage="Must provide user token and list")
+
+    if (listName == "read"):
+        return fetchList(token=token, list="read")
+    elif (listName == "to-read"):
+        return fetchList(token=token, list="to-read")
+    else:
+        return outputFailure(failMessage="List name invalid")
+
+
+def setReadStatus(pagesread=None, bookid=None, token=None):
+    # Set how many pages of a book have been read
+
+    if (pagesread is None) or (bookid is None) or (token is None):
         return outputFailure(failMessage="Must supply pages read, GoodReads ID, and book id.")
     try:
         pagesread = int(pagesread)
@@ -16,52 +29,42 @@ def setReadStatus(pagesread=None, bookid=None, grid=None):
         return outputFailure(failMessage="GoodReads ID and book ID must be valid numbers.")
 
     connection = Database()
-    connection.setReadStatus(grid=grid, pagesRead=pagesread, bookId=bookid)
+    connection.setReadStatus(token=token, pagesRead=pagesread, bookId=bookid)
     connection.close()
     return outputSuccess()
 
 
-#  Get list from the "read" shelf
-def getReadList(sortmethod=None, grid=None):
-    """Call getList with and supply the "read" list and return result"""
-    if(isinstance(grid, str)):
-        try:
-            grid = int(grid)
-        except:
-            return outputFailure(failMessage="GoodReads ID must be valid integer")
-    return fetchList(grid=grid, list="read", sortMethod=sortmethod)
-
-
-# Get list from the "to-read" shelf
-def getToReadList(sortmethod=None, grid=None):
-    """Call getList with and supply the "to-read" list and return result"""
-    if (isinstance(grid, str)):
-        try:
-            grid = int(grid)
-        except:
-            return outputFailure(failMessage="GoodReads ID must be valid integer")
-    return fetchList(grid=grid, list="to-read", sortMethod=sortmethod)
-
-
-# Login user
 def logIn(grid=None):
+    # Returns token of user. If the user doesn't already exist in database, creates a new user/token
+
     if grid is None:
         return outputFailure(failMessage="Must supply GoodReads ID")
-
     try:
         grid = int(grid)
     except:
         return outputFailure(failMessage="GoodReads ID must be valid number.")
 
-    already = True
-
     connection = Database()
     if connection.userExists(grid=grid) is False:
-        already = False
-        if (not connection.createUser(grid=grid)):
-            return outputFailure(failMessage="Failed to create user")
+        # User does not exist already, create it
+        token = connection.createUser(grid=grid)
+    else:
+        # User exists, assign it a new token
+        token = connection.newToken(grid)
     connection.close()
+
     return outputSuccess(results={
-        "grid": grid,
-        "already_created": already
+        "token": token
     })
+
+
+def tokenValid(token=None):
+    # Returns True if a token is a valid user in database, False if not
+
+    if token is None:
+        return outputFailure(failMessage="Requires token. ")
+
+    connection = Database()
+    if (connection.tokenValid(token)):
+        return outputTrue()
+    return outputFalse()

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import List from './List';
 
 class ListView extends Component{
     constructor(props){
@@ -6,17 +7,19 @@ class ListView extends Component{
         this.state = {
             error: null,
             isLoaded: false,
-            result: null
+            result: null,
         }
     }
     componentDidMount(){
-        fetch("http://192.168.99.100:8080/getread")
+        var url = "http://192.168.99.100:8080/getread?grid="+this.props.grid;
+        console.log(url);
+        fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({
                         isLoaded: true,
-                        result: result
+                        results: {result}
                     });
                 },
                 (error) => {
@@ -28,16 +31,17 @@ class ListView extends Component{
             );
     }
     render(){
-        var { error, isLoaded, result } = this.state
+        var { error, isLoaded, results } = this.state
         if(error){
-            return <div class='error'>Error in fetch</div>
+            return <div className='error'>Error in fetch - ListView</div>
         } else if(!isLoaded){
-            return <div class='waiting'>Loading...</div>
+            return <div className='waiting'>Loading...</div>
+        } else if(results.fail){
+            return <div className='error'>Error on server - ListView</div>
         } else {
-            console.log(result);
-            return(
+            return (
                 <section id='ListView'>
-                    <h1>Signed in, listview here</h1>
+                    <List results={results} />
                 </section>
             );
         }

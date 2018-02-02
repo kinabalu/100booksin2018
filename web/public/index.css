@@ -52,7 +52,7 @@ body {
 }
 .wrapper {
 	width: 100%;
-	min-width: 1000px;
+	min-width: 500px;
 }
 
 
@@ -81,7 +81,7 @@ body {
 	overflow: hidden;
 }
 .content {
-	/* padding: 0 0 0 420px; */
+	/* padding: 0 0 0 420px;  -- for sidebar*/
 	padding: 0px;
 }
 
