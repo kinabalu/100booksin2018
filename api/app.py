@@ -1,6 +1,6 @@
 from apistar import Route
 from apistar.frameworks.wsgi import WSGIApp as App
-from project.views import setReadStatus, getList, logIn, tokenValid
+from project.views import setReadStatus, getList, logIn, tokenValid, _testPagesRead
 
 routes = [
     # Get shelf lists
@@ -13,7 +13,10 @@ routes = [
     Route("/token/{token}/", "GET", tokenValid),
 
     # Update pages read for specific book
-    Route('/pagesread/{token}/{bookid}/{pagesread}/', 'GET', setReadStatus)
+    Route('/pagesread/{token}/{bookid}/{pagesread}/', 'GET', setReadStatus),
+
+    # Check pages read of book, for testing purposes
+    Route('/testpagesread/{token}/{bookid}/', 'GET', _testPagesRead),
 ]
 
 app = App(routes=routes)
