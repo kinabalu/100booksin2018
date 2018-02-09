@@ -1,0 +1,60 @@
+:local(.Tabs){
+  padding: 5px;
+  padding-top: 0;
+  margin: 0 auto;
+  width: 261px;
+}
+:local(.firstTab){
+  height: 35px;
+  padding: 7px;
+  padding-left: 13px;
+  display: inline;
+  border: none;
+  border-radius: 3px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  width: 49.69px;
+}
+:local(.secondTab){
+   padding: 7px;
+   padding-right: 13px;
+   display: inline;
+   height: 35px;
+   border: none;
+   border-left: 1px solid white;
+   border-radius: 3px;
+   border-top-left-radius: 0;
+   border-bottom-left-radius: 0;
+   width: 63.25px;
+}
+:local(.selectedTab){
+  color: white;
+  font-weight: bold;
+  background-color: blue;
+}
+
+:local(.logout) {
+    height: 35px;
+    padding: 7px;
+    display: inline;
+    border: none;
+    border-radius: 3px;
+    margin-left: 20px;
+}
+:local(.logout:active) {
+    color: white;
+    background-color: blue;
+}
+
+:local(.bookCount){
+    display: inline;
+}
+:local(.bookCount .countSelect){
+    height: 35px;
+    width: 51px;
+    padding: 7px;
+    border: none;
+    border-radius: 3px;
+    margin-right: 20px;
+    background-color: buttonface;
+}

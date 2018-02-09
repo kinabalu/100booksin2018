@@ -20,8 +20,3 @@ routes = [
 ]
 
 app = App(routes=routes)
-
-# ------------------#
-# To-do
-# ------------------#
-#   -Write thorough unit testings

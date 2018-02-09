@@ -49,18 +49,32 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, 
 }
 body {
 	font: 12px/18px Arial, sans-serif;
+	height: 100%;
+	width: 100%;
 }
 .wrapper {
 	width: 100%;
-	min-width: 500px;
+	/*min-width: 500px;*/
+	background-color: #c5cae9ff;
+	height: 100%;
 }
 
 
 /* Header
 -----------------------------------------------------------------------------*/
 .header {
-	height: 100px;
-	background: #FFE680;
+	height: 75px;
+	background: #c5cae9ff;
+	background-image: url("header.png");
+	background-repeat: repeat-x;
+}
+.header-image {
+	height: 70%;
+	width: 100%;
+	background-image: url("Name.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: auto;
 }
 
 
@@ -81,8 +95,11 @@ body {
 	overflow: hidden;
 }
 .content {
-	/* padding: 0 0 0 420px;  -- for sidebar*/
 	padding: 0px;
+	font-family: 'Josefin Sans', sans-serif;
+}
+input {
+	font-family: 'Josefin Sans', sans-serif;
 }
 
 
@@ -101,5 +118,30 @@ body {
 -----------------------------------------------------------------------------*/
 .footer {
 	height: 100px;
-	background: #BFF08E;
+	background: #c5cae9ff;
+}
+
+
+/* Content Boxes
+-----------------------------------------------------------------------------*/
+.error {}
+.error section {
+	margin: auto;
+	width: 150px;
+	border: 5px solid #e57373;
+	border-radius: 5px;
+	text-align: center;
+	padding: 5px 0px;
+	font-weight: bold;
+}
+
+.waiting {}
+.waiting section {
+	margin: auto;
+	width: 150px;
+	border: 5px solid white;
+	border-radius: 5px;
+	text-align: center;
+	padding: 5px 0px;
+	font-weight: bold;
 }

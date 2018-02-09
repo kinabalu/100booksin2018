@@ -1,6 +1,7 @@
 from .fetchlist import fetchList
 from .database import Database
 from .output import outputTrue, outputFalse, outputFailure, outputSuccess
+import requests
 
 
 # Get list of books on a shelf
@@ -8,10 +9,8 @@ def getList(token=None, listName=None):
     if (token is None) or (listName is None):
         return outputFailure(failMessage="Must provide user token and list")
 
-    if (listName == "read"):
-        return fetchList(token=token, list="read")
-    elif (listName == "to-read"):
-        return fetchList(token=token, list="to-read")
+    if (listName == "read") or (listName == "to-read"):
+        return fetchList(token, listName)
     else:
         return outputFailure(failMessage="List name invalid")
 

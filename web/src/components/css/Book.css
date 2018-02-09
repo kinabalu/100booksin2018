@@ -7,9 +7,11 @@
 
 :local(.BookLayout){
     display: grid;
+    overflow: hidden;
     grid-column-gap: 5px;
     grid-row-gap: 0px;
     grid-template-columns: 117px 3fr;
-    grid-template-rows: 6fr 30px;
+    grid-template-rows: 189px 30px;
     grid-template-areas: "image content" "progress progress";
+    height: 219px;
 }

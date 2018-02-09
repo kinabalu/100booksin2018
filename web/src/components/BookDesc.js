@@ -10,7 +10,7 @@ class BookDesc extends Component {
                         <b>{this.props.book.title}</b>
                     </header>
                     <section className={styles.BookInfoPages}>
-                        Pages read info here.
+                        
                     </section>
                 </div>
             </div>

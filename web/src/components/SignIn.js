@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import ListView from './ListView';
 import styles from './css/SignIn.css'
+import Cookies from 'universal-cookie';
+
+// 76836596
 
 class SignIn extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 'Name here',
+            value: '76836596',
             error: null,
             isLoaded: false,
             isLoggedIn: false,
             submitted: false,
+            cookies: new Cookies()
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,23 +24,24 @@ class SignIn extends Component {
     }
     handleSubmit(event){
         // Validate input
-        //window.alert("http://192.168.99.100:8080/login?grid="+this.state.value);
         this.setState({
             submitted: true
         });
-        fetch("http://192.168.99.100:8080/login?grid="+this.state.value)
+        fetch("http://192.168.99.100:8080/user/"+this.state.value)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({
                         isLoaded: true,
-                        result: result.result
+                        token: result.result.token
                     });
+                    this.state.cookies.set("GRUserToken", result.result.token, {path: '/'})
                 },
                 (error) => {
                     this.setState({
                         isLoaded: false,
-                        error: true
+                        error: true,
+                        data: error
                     });
                 }
             );
@@ -48,23 +53,45 @@ class SignIn extends Component {
 
         if(!submitted){
             return(
-                <section className={styles.SignIn}>
-                    <form onSubmit={this.handleSubmit}>
-                        <input value={this.state.value} onChange={this.handleChange} />
-                        <input type='submit' />
-                    </form>
-                </section>
+                <form onSubmit={this.handleSubmit}>
+                    <section className={styles.SignIn}>
+                        <section className={styles.gridInfo}>
+                            GoodReads user ID:
+                        </section>
+                        <section className={styles.grid}>
+                            <input value={this.state.value} onChange={this.handleChange} />
+                        </section>
+
+                        <section className={styles.bookCountInfo}>
+                            Book count:
+                        </section>
+                        <section className={styles.bookCount}>
+                            <select>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15" selected>15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                            </select>
+                        </section>
+
+
+                        <section className={styles.submit}>
+                            <input type='submit' value='Load' />
+                        </section>
+                    </section>
+                </form>
             );
         } else {
             if(error){
-                console.log("Error doing stuff");
-                return <div class='error'>Error in fetch</div>
+                console.log(this.state.data);
+                return <div className='error'><section>Server request error</section></div>
             } else if(!isLoaded){
-                return <div class='waiting'>Loading...</div>
+                return <div className='waiting'><section>Loading...</section></div>
             } else {
-                console.log(result);
                 return (
-                    <ListView />
+                    <ListView token={this.state.token} />
                 )
             }
         }

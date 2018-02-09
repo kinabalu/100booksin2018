@@ -6,6 +6,9 @@ FROM node:9.4.0
 #RUN yarn build 100books --production
 
 COPY . .
+#RUN npm install
+#RUN npm install react-cookie --save
+#RUN npm install react-cookie
 #RUN yarn build --production
 #RUN npm install -g serve
 

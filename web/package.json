@@ -2,17 +2,19 @@
   "name": "100-books",
   "version": "0.0.1",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "create-react-app": "^1.5.1",
+    "react": "^15.2.1",
+    "react-cookie": "^2.1.2",
+    "react-dom": "^15.2.1",
+    "react-scripts": "0.1.0"
+  },
   "scripts": {
     "startOLD": "webpack-dev-server",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "dependencies": {
-    "react": "^15.2.1",
-    "react-dom": "^15.2.1"
   },
   "devDependencies": {
     "react-scripts": "0.1.0"

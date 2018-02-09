@@ -1,31 +1,35 @@
 import requests
+import urllib.request
 import xmltodict
 from .database import Database
 from .output import outputFailure, outputSuccess
+
 
 
 # Request list from GoodReads API
 def fetchList(token, list):
     assert isinstance(token, str)
     assert isinstance(list, str)
-
     warningMessage = []
-    sortMethod = "date_read"
     connection = Database()
-    grid = connection.getUserID(token)
-
-    # User with token provided is nonexistent in database
-    if grid is None:
-        return outputFailure(failMessage="User not in database")
-    else:
-        grid = grid
-
-    url = "https://www.goodreads.com/review/list.xml"
-    urlParams = {'key': "MvliPKXB0RGuCSy4wSOdfg", 'v': "2", 'shelf': list, 'sort': sortMethod, 'id': grid}
+    grid = str(connection.getUserID(token))
+    if(grid is None):
+        return outputFailure(failMessage="Token incorrect")
 
     # Try requesting API, catch if connection couldn't be opened
     try:
-        request = requests.get(url, params=urlParams).text
+        url = "https://www.goodreads.com/review/list.xml"
+        urlParams = {
+            "key": "MvliPKXB0RGuCSy4wSOdfg",
+            "v": 2,
+            "id": grid,
+            "shelf": list,
+        }
+
+        request = requests.get(url, params=urlParams)
+        #request.encoding = "utf8"
+        request = request.text
+
     except requests.exceptions.RequestException as e:
         # Request could not be made
 
@@ -57,6 +61,7 @@ def fetchList(token, list):
             return outputSuccess(results=results, warningMessage=warningMessage, message=token)
 
 
+
 # Parse book list into only the useful parts
 # This will be made more efficient by getting a list of books for user and comparing each book to that list to see if it exists,
 #   rather than querying the database for each book to see if it exists
@@ -71,9 +76,10 @@ def parseBookList(bookList, grid, shelf, token, connection):
             "link": thisBook["link"],
             "pages": int(thisBook["num_pages"]),
             "rating": float(thisBook["average_rating"]),
-            "description": thisBook["description"],
+            #"description": thisBook["description"],
             "list": shelf
         }
+
         connection.cursor.execute(connection.queries["bookExists"], (grid, bookData["bookid"]))
         result = connection.cursor.fetchone()
         if (result is None):
@@ -82,20 +88,18 @@ def parseBookList(bookList, grid, shelf, token, connection):
             connection.cursor.execute(
                 connection.queries["createBook"],
                 (grid,
-                 bookData["title"].encode('utf-8'),
-                 bookData["imageurl"].encode('utf-8'),
-                 bookData["link"].encode('utf-8'),
+                 bookData["title"],
+                 bookData["imageurl"],
+                 bookData["link"],
                  int(bookData["pages"]),
                  int(bookData["rating"]),
-                 bookData["description"].encode('utf-8'),
                  shelf,
                  0,
-                 bookData["bookid"],
-                 token
+                 bookData['bookid'],
                  ))
             bookData["fetched"] = True
         else:
-            bookData["pages_read"] = int(result["pages_read"])
+            bookData["pages_read"] = result["pages_read"]
             bookData["fetched"] = False
 
         parsedList.append(bookData)

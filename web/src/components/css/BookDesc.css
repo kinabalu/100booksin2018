@@ -2,7 +2,7 @@
     float: left;
     display: block;
     width: 60%;
-    margin: 10px; /* Top and bottom margin of 10px, left and right margin set to auto */
+    margin: 10px;
     grid-area: content;
 }
 :local(.BookInfoGrid){

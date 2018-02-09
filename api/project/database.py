@@ -7,19 +7,19 @@ import time
 # Database operations wrapper with built in statements
 class Database(object):
     database = 'books'
-    host = '172.17.0.2'
+    host = '172.17.0.4'
     user = 'postgres'
     password = 'police_lama'
-    bookCountList = [5, 10, 15, 20, 25, 30, 35]
+    bookCountList = [5, 10, 15, 20, 25, 30, 35] # Going to do this on the client side actually
     queries = {
         "userExists": 'SELECT grid FROM users WHERE grid = %s',
-        "bookExists": "SELECT * FROM books WHERE grid = %s AND bookid = %s",
+        "bookExists": "SELECT pages_read FROM books WHERE grid = %s AND bookid = %s",
         "createUser": 'INSERT INTO users ( grid, token ) VALUES ( %s, %s )',
         "setReadStatus": 'UPDATE books SET pages_read = %s WHERE bookid = %s AND grid = %s',
         "setNewToken": 'UPDATE users SET token = %s WHERE grid = %s',
         "userIdByToken": "SELECT grid FROM users WHERE token = %s",
         "userTokenById": "SELECT token FROM users WHERE grid = %s",
-        "createBook": "INSERT INTO books ( grid, title, imageurl, link, pages, rating, description, list, pages_read, bookid, token ) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )",
+        "createBook": "INSERT INTO books ( grid, title, imageurl, link, pages, rating, list, pages_read, bookid ) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s )",
         "pagesRead": "SELECT pages_read FROM books WHERE grid = %s AND bookid = %s"
     }
     connection = None
@@ -75,9 +75,9 @@ class Database(object):
 
         self.cursor.execute(self.queries["userIdByToken"], (token,))
         fetch = self.cursor.fetchone();
-        if (fetch is None):
+        if(fetch is None):
             return None
-        return fetch[0]
+        return str(fetch[0])
 
     # Return token by goodreads id
     def getToken(self, grid):
