@@ -10,18 +10,23 @@ class BookDesc extends Component {
             result: {},
             error: false,
             data: "",
-            pages_read: this.props.pages_read
+            pages_read: this.props.pages_read,
+            newvalue: this.props.pages_read
         }
         this.newPagesRead = this.newPagesRead.bind(this);
+        this.handleSumbit = this.handleSumbit.bind(this);
     }
     newPagesRead(input){
-        // Send ajax
-        var newPages = input.target.value;
+       this.setState({
+            newvalue: input.target.value
+       });
+    }
+    handleSumbit(event){
+        var newPages = this.state.newvalue;
         var url = Config.apiIp+"/pagesread/"+this.props.token+"/"+this.props.book.bookid+"/"+newPages;
 
         console.log(url)
 
-        var pr = this.props.pages_read
         fetch(url)
             .then(res => res.json())
             .then(
@@ -29,7 +34,6 @@ class BookDesc extends Component {
                     this.setState({
                         isLoaded: true,
                         result: result,
-                        pages_read: pr+1
                     });
                 },
                 (error) => {
@@ -39,11 +43,13 @@ class BookDesc extends Component {
                         data: error
                     });
                 }
-            );
-        console.log(this.state.result);
-        this.forceUpdate();
+            ).then(() => {
+                console.log(this.state.result)
+            });
+        event.preventDefault();
     }
     render(){
+        var defacto = this.state.pages_read;
         return (
             <div className={styles.BookInfoWrap}>
                 <div className={styles.BookInfoGrid}>
@@ -51,7 +57,7 @@ class BookDesc extends Component {
                         <b>{this.props.book.title}</b>
                     </header>
                     <section className={styles.BookInfoPages}>
-                        Youve read: <input onChange={this.newPagesRead} className={styles.pagesInput} value={this.state.pages_read} type='number' /> of {this.props.book.pages} pages.
+                        Youve read: <form onSubmit={this.handleSumbit}><input onChange={this.newPagesRead} className={styles.pagesInput} defaultValue={defacto} /></form> of {this.props.book.pages} pages.
                     </section>
                 </div>
             </div>

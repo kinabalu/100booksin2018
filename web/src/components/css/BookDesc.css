@@ -1,7 +1,7 @@
 :local(.BookInfoWrap){
     float: left;
     display: block;
-    width: 60%;
+    width: 92%;
     margin: 10px;
     grid-area: content;
 }
@@ -14,6 +14,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas: "title" "pages";
+
 }
 
 :local(.BookInfoTitle){
@@ -24,11 +25,17 @@
 :local(.BookInfoPages){
     grid-area: pages;
     margin: 5px 5px;
-    font-size: 17px;
+    font-size: 13px;
     color: White;
 }
 
+:local(.BookInfoPages form) {
+    display: inline;
+}
+
 :local(.pagesInput) {
-    width: 50px;
+    width: 35px;
     height: 20px;
+    display: inline;
+    border-radius: 4px;
 }
