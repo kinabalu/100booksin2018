@@ -4,11 +4,14 @@ import styles from './css/List.css'
 
 class List extends Component {
     render(){
+        var bookCount = this.props.bookCount;
+        var token = this.props.token;
+
         return(
             <section className={styles.BookListWrap} id='BookListWrap'>
                 <div className={styles.BookList} id='BookList'>
-                    {this.props.results.result.result.map(function(key, result){
-                        return <Book key={key.bookid} book={key} />
+                    {this.props.results.result.result.slice(0, bookCount).map(function(key, result){
+                        return <Book token={token} key={key.bookid} book={key} />
                     })}
                 </div>
             </section>

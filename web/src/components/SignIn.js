@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ListView from './ListView';
 import styles from './css/SignIn.css'
 import Cookies from 'universal-cookie';
+import { Config } from '../config.js';
 
 // 76836596
 
@@ -27,7 +28,12 @@ class SignIn extends Component {
         this.setState({
             submitted: true
         });
-        fetch("http://192.168.99.100:8080/user/"+this.state.value)
+
+        var url = Config.apiIp+"/user/"+this.state.value
+
+        console.log(url);
+
+        fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -49,7 +55,7 @@ class SignIn extends Component {
         event.preventDefault();
     }
     render(){
-        var { error, isLoaded, result, submitted } = this.state
+        var { error, isLoaded, submitted } = this.state
 
         if(!submitted){
             return(

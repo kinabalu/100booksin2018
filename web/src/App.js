@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import SignIn from './components/SignIn';
 import ListView from './components/ListView';
 import Cookies from 'universal-cookie';
+import { Config } from './config.js';
 
 class Home extends Component {
     constructor(props){
@@ -16,7 +17,7 @@ class Home extends Component {
     }
     componentDidMount(){
         if(typeof this.state.cookies.get("GRUserToken") !== 'undefined'){ // Cookie exists, check it's validity
-            var url = "http://192.168.99.100:8080/token/"+this.state.cookies.get("GRUserToken");
+            var url = Config.apiIp+"/token/"+this.state.cookies.get("GRUserToken");
             fetch(url)
                 .then(res => res.json())
                 .then(
@@ -50,6 +51,7 @@ class Home extends Component {
             return <div className='waiting'><section>Loading...</section></div>
         } else {
             if(isLoggedIn){
+                window.token = this.state.token;
                 return (
                   <ListView token={this.state.token} />
                 );

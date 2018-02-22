@@ -16,24 +16,24 @@ def fetchList(token, list):
     if(grid is None):
         return outputFailure(failMessage="Token incorrect")
 
+    url = "https://www.goodreads.com/review/list.xml"
+    # https://www.goodreads.com/review/list.xml?key=MvliPKXB0RGuCSy4wSOdfg&v=2&id=76836596&shelf=read
+    urlParams = {
+        "key": "MvliPKXB0RGuCSy4wSOdfg",
+        "v": 2,
+        "id": grid,
+        "shelf": list,
+    }
     # Try requesting API, catch if connection couldn't be opened
     try:
-        url = "https://www.goodreads.com/review/list.xml"
-        urlParams = {
-            "key": "MvliPKXB0RGuCSy4wSOdfg",
-            "v": 2,
-            "id": grid,
-            "shelf": list,
-        }
-
         request = requests.get(url, params=urlParams)
-        #request.encoding = "utf8"
+        request.encoding = "utf8"
         request = request.text
 
     except requests.exceptions.RequestException as e:
         # Request could not be made
 
-        return outputFailure(failMessage="Connection to GoodReads could not be made", warningMessage=warningMessage)
+        return outputFailure(failMessage="Connection to GoodReads could not be made: " + str(e), warningMessage=warningMessage)
     else:
         # Request was made successfully
 
@@ -57,7 +57,8 @@ def fetchList(token, list):
                         "review" in parsedRequest["GoodreadsResponse"]["reviews"]) else {}
 
             # Parse and return goodreads booklist
-            results = parseBookList(response, grid=grid, shelf=list, connection=connection, token=token)
+            results = parseBookList(bookList=response, grid=grid, shelf=list, connection=connection, token=token)
+
             return outputSuccess(results=results, warningMessage=warningMessage, message=token)
 
 
@@ -67,18 +68,25 @@ def fetchList(token, list):
 #   rather than querying the database for each book to see if it exists
 def parseBookList(bookList, grid, shelf, token, connection):
     parsedList = []
-    for book in bookList:
-        thisBook = book["book"]
+    if(type(bookList) is not list):
+        bookList = [bookList, ]
+
+
+    for single_book in bookList:
+        thisBook = single_book["book"]
         bookData = {
             "bookid": int(thisBook["id"]["#text"]),
             "title": thisBook["title_without_series"],
             "imageurl": thisBook["image_url"],
             "link": thisBook["link"],
-            "pages": int(thisBook["num_pages"]),
             "rating": float(thisBook["average_rating"]),
             #"description": thisBook["description"],
             "list": shelf
         }
+        if("num_pages" in thisBook and thisBook["num_pages"] is not None):
+            bookData["pages"] = int(thisBook["num_pages"])
+        else:
+            bookData["pages"] = 999
 
         connection.cursor.execute(connection.queries["bookExists"], (grid, bookData["bookid"]))
         result = connection.cursor.fetchone()

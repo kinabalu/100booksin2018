@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import List from './List';
+import { Config } from '../config.js';
 //import styles from './css/List.css'
 
 class CreateToReadList extends Component {
@@ -12,7 +13,9 @@ class CreateToReadList extends Component {
       }
   }
   componentDidMount(){
-      var url = "http://192.168.99.100:8080/shelf/"+this.props.token+"/to-read";
+      var url = Config.apiIp+"/shelf/"+this.props.token+"/to-read";
+
+      console.log(url);
 
       fetch(url)
           .then(res => res.json())
@@ -43,7 +46,7 @@ class CreateToReadList extends Component {
       } else {
         return(
           <section id='ListView'>
-              <List results={results} />
+              <List bookCount={this.props.bookCount} token={this.props.token} results={results} />
           </section>
         );
       }

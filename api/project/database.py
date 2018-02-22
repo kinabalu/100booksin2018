@@ -8,6 +8,7 @@ import time
 class Database(object):
     database = 'books'
     host = '172.17.0.4'
+    #host = '172.18.0.2'
     user = 'postgres'
     password = 'police_lama'
     bookCountList = [5, 10, 15, 20, 25, 30, 35] # Going to do this on the client side actually
