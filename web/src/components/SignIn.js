@@ -15,19 +15,36 @@ class SignIn extends Component {
             isLoaded: false,
             isLoggedIn: false,
             submitted: false,
-            cookies: new Cookies()
+            cookies: new Cookies(),
+            userError: false,
+            userErrorMsg: ""
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange(event) {
-        this.setState({value: event.target.value});
+        if(!isNaN(event.target.value)){
+            this.setState({
+                value: event.target.value,
+                userError: false,
+                userErrorMsg: ""
+            });
+        } else {
+            this.setState({
+                userError: true,
+                userErrorMsg: "GoodReads user ID must be number."
+            })
+        }
     }
     handleSubmit(event){
         // Validate input
-        this.setState({
-            submitted: true
-        });
+        if(!this.state.userError){
+            this.setState({
+                submitted: true
+            });
+        } else {
+            return ""
+        }
 
         var url = Config.apiIp+"/user/"+this.state.value
 
@@ -55,17 +72,23 @@ class SignIn extends Component {
         event.preventDefault();
     }
     render(){
-        var { error, isLoaded, submitted } = this.state
+        var { error, isLoaded, submitted, userError, userErrorMsg } = this.state
+        var preMsg = ""
+
+        if(userError){
+            preMsg = <div className='error'><section>{userErrorMsg}</section></div>
+        }
 
         if(!submitted){
-            return(
+            return (
                 <form onSubmit={this.handleSubmit}>
+                    {preMsg}
                     <section className={styles.SignIn}>
                         <section className={styles.gridInfo}>
                             GoodReads user ID:
                         </section>
                         <section className={styles.grid}>
-                            <input value={this.state.value} onChange={this.handleChange} />
+                            <input defaultValue={this.state.value} required pattern="[0-9]*" onChange={this.handleChange} />
                         </section>
 
                         <section className={styles.bookCountInfo}>

@@ -46,6 +46,7 @@ class BookDesc extends Component {
             ).then(() => {
                 console.log(this.state.result)
             });
+        this.forceUpdate();
         event.preventDefault();
     }
     render(){
