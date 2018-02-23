@@ -40,9 +40,18 @@ class SignIn extends Component {
     }
     handleBookCountChange(event){
         var val = event.target.value;
-        this.setState({
-            bookCount: val
-        })
+        if(!isNaN(val)){
+            this.setState({
+                bookCount: val,
+                userError:false,
+                userErrorMsg:""
+            })
+        } else {
+            this.setState({
+                userError: true,
+                userErrorMsg: "Book count must be a number"
+            });
+        }
     }
     handleSubmit(event){
         // Validate input

@@ -12,7 +12,9 @@ class ListView extends Component{
             isLoaded: true,
             shelf: 0,
             cookies: new Cookies(),
-            bookCount: 15
+            bookCount: 15,
+            userError: false,
+            userErrorMsg: "",
         }
         this.handleTabClick = this.handleTabClick.bind(this);
         this.logout = this.logout.bind(this);
@@ -28,9 +30,18 @@ class ListView extends Component{
       })
     }
     handleCountChange(e){
-        this.setState({
-            bookCount: e.target.value
-        })
+        if(!isNaN(e.target.value)){
+            this.setState({
+                bookCount: e.target.value,
+                userError:false,
+                userErrorMsg:""
+            })
+        } else {
+            this.setState({
+                userError: true,
+                userErrorMsg: "Book count must be a number"
+            });
+        }
     }
     componentDidMount(){}
     logout(){
@@ -38,53 +49,40 @@ class ListView extends Component{
         window.location.reload();
     }
     render(){
-        var shelf = this.state.shelf
-        if(shelf === 0){
-          return (
-            <div className={styles.TabsContainer}>
-              <nav className={styles.Tabs}>
-                <section className={styles.bookCount}>
-                    <select className={styles.countSelect} value={this.state.bookCount} onChange={this.handleCountChange}>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
-                    </select>
-                </section>
-                <input type="button" className={styles.firstTab + " " + styles.selectedTab} value="read" onClick={this.handleTabClick.bind(this, 0)} />
-                <input type="button" className={styles.secondTab} value="to-read" onClick={this.handleTabClick.bind(this, 1)} />
-                <input type='button' className={styles.logout} value='Logout' onClick={this.logout.bind(this)} />
-              </nav>
-              <CreateReadList bookCount={this.state.bookCount} token={this.props.token} />
-            </div>
-          );
-      } else if(shelf === 1){
-          return(
-            <div className={styles.TabsContainer}>
-              <nav className={styles.Tabs}>
-                  <section className={styles.bookCount}>
-                      <select className={styles.countSelect}>
-                          <option value="5">5</option>
-                          <option value="10">10</option>
-                          <option value="15" selected>15</option>
-                          <option value="20">20</option>
-                          <option value="25">25</option>
-                          <option value="30">30</option>
-                      </select>
-                  </section>
-                <input type="button" className={styles.firstTab} value="read" onClick={this.handleTabClick.bind(this, 0)} />
-                <input type="button" className={styles.secondTab + " " + styles.selectedTab} value="to-read" onClick={this.handleTabClick.bind(this, 1)} />
-                <input type='button' className={styles.logout} value='Logout' onClick={this.logout.bind(this)} />
-              </nav>
-              <CreateToReadList bookCount={this.state.bookCount} token={this.props.token} />
-            </div>
-          );
-        } else {
-
-
+        var { error, isLoaded, submitted, userError, userErrorMsg, shelf } = this.state
+        var preMsg = "";
+        var shelfElement = ""
+        if(userError){
+            preMsg = <div className='error'><section>{userErrorMsg}</section></div>
         }
+
+        if(shelf == 0){
+            shelfElement = <CreateReadList bookCount={this.state.bookCount} token={this.props.token} />
+        } else if(shelf == 1) {
+            shelfElement = <CreateToReadList bookCount={this.state.bookCount} token={this.props.token} />
+        }
+
+        return (
+          <div className={styles.TabsContainer}>
+            <nav className={styles.Tabs}>
+              <section className={styles.bookCount}>
+                  <select className={styles.countSelect} value={this.state.bookCount} onChange={this.handleCountChange}>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                      <option value="30">30</option>
+                  </select>
+              </section>
+              <input type="button" className={styles.firstTab + " " + styles.selectedTab} value="read" onClick={this.handleTabClick.bind(this, 0)} />
+              <input type="button" className={styles.secondTab} value="to-read" onClick={this.handleTabClick.bind(this, 1)} />
+              <input type='button' className={styles.logout} value='Logout' onClick={this.logout.bind(this)} />
+            </nav>
+            {preMsg}
+            {shelfElement}
+          </div>
+        );
     }
 }
 
