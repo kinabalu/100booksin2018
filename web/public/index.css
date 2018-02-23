@@ -119,6 +119,8 @@ input {
 .footer {
 	height: 100px;
 	background: #c5cae9ff;
+	text-align: center;
+	padding-top: 10px;
 }
 
 

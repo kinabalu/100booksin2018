@@ -30,7 +30,7 @@ class Book extends Component {
                 <div className={styles.BookLayout}>
                     <BookImage imageurl={this.props.book.imageurl} />
                     <BookDesc token={this.props.token} renderNew={this.handlePercentChange} pages_read={this.props.book.pages_read} book={this.props.book} />
-                    <BookProgress percent={percentProgress} />
+                    <BookProgress total={this.props.book.pages} percent={percentProgress} />
                 </div>
             </div>
         )

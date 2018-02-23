@@ -15,6 +15,7 @@ class ListView extends Component{
             bookCount: 15,
             userError: false,
             userErrorMsg: "",
+            page: 0
         }
         this.handleTabClick = this.handleTabClick.bind(this);
         this.logout = this.logout.bind(this);
@@ -23,6 +24,11 @@ class ListView extends Component{
         if(this.props.bookCount){
             this.state.bookCount = this.props.bookCount;
         }
+    }
+    handlePageChange(whatPage){
+        this.setState({
+            page: whatPage
+        })
     }
     handleTabClick(id, e){
       this.setState({
@@ -63,6 +69,7 @@ class ListView extends Component{
         }
 
         return (
+          <div>
           <div className={styles.TabsContainer}>
             <nav className={styles.Tabs}>
               <section className={styles.bookCount}>
@@ -81,6 +88,10 @@ class ListView extends Component{
             </nav>
             {preMsg}
             {shelfElement}
+          </div>
+          <footer className="footer">
+
+          </footer>
           </div>
         );
     }

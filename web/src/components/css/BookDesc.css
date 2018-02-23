@@ -41,4 +41,40 @@
     height: 20px;
     display: inline;
     border-radius: 4px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+:local(.pagesSubmit) {
+    width: 20px;
+    height: 26px;
+    padding-bottom: 5px;
+    padding-top: 0px;
+    margin-top: 0px;
+    text-align: center;
+    padding-right: 18px;
+    display: inline;
+    border-radius: 4px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+@keyframes toyellow {
+    0% {background-color: white;}
+    100% {background-color: yellow;}
+}
+@keyframes togreen{
+    0% {background-color: yellow;}
+    50% {background-color: green;}
+    100% {background-color: white;}
+}
+
+:local(.inputEdited){
+    background-color: yellow;
+    animation-name: toyellow;
+    animation-duration: 750ms;
+}
+:local(.inputSaved){
+    background-color: white;
+    animation-name: togreen;
+    animation-duration: 1500ms;
 }
