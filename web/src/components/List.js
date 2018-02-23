@@ -6,7 +6,7 @@ class List extends Component {
     render(){
         var bookCount = this.props.bookCount;
         var token = this.props.token;
-
+        console.log(this.props.results.result.result)
         return(
             <section className={styles.BookListWrap} id='BookListWrap'>
                 <div className={styles.BookList} id='BookList'>

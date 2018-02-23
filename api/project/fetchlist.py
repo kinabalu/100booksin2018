@@ -17,7 +17,8 @@ def fetchList(token, list):
         return outputFailure(failMessage="Token incorrect")
 
     url = "https://www.goodreads.com/review/list.xml"
-    # https://www.goodreads.com/review/list.xml?key=MvliPKXB0RGuCSy4wSOdfg&v=2&id=76836596&shelf=read
+    # https://www.goodreads.com/review/list.xml?key=MvliPKXB0RGuCSy4wSOdfg&v=2&shelf=read&id=76836596
+    # https://www.goodreads.com/review/list.xml?key=MvliPKXB0RGuCSy4wSOdfg&v=2&shelf=read&id=75953104
     urlParams = {
         "key": "MvliPKXB0RGuCSy4wSOdfg",
         "v": 2,
@@ -68,6 +69,10 @@ def fetchList(token, list):
 #   rather than querying the database for each book to see if it exists
 def parseBookList(bookList, grid, shelf, token, connection):
     parsedList = []
+
+    if(not bookList):
+       return parsedList;
+
     if(type(bookList) is not list):
         bookList = [bookList, ]
 
