@@ -17,6 +17,10 @@ class ListView extends Component{
         this.handleTabClick = this.handleTabClick.bind(this);
         this.logout = this.logout.bind(this);
         this.handleCountChange = this.handleCountChange.bind(this);
+
+        if(this.props.bookCount){
+            this.state.bookCount = this.props.bookCount;
+        }
     }
     handleTabClick(id, e){
       this.setState({

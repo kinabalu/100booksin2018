@@ -17,9 +17,11 @@ class SignIn extends Component {
             submitted: false,
             cookies: new Cookies(),
             userError: false,
-            userErrorMsg: ""
+            userErrorMsg: "",
+            bookCount: 15
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleBookCountChange = this.handleBookCountChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange(event) {
@@ -35,6 +37,12 @@ class SignIn extends Component {
                 userErrorMsg: "GoodReads user ID must be number."
             })
         }
+    }
+    handleBookCountChange(event){
+        var val = event.target.value;
+        this.setState({
+            bookCount: val
+        })
     }
     handleSubmit(event){
         // Validate input
@@ -95,10 +103,10 @@ class SignIn extends Component {
                             Book count:
                         </section>
                         <section className={styles.bookCount}>
-                            <select>
+                            <select onChange={this.handleBookCountChange} value={this.state.bookCount}>
                                 <option value="5">5</option>
                                 <option value="10">10</option>
-                                <option value="15" selected>15</option>
+                                <option value="15">15</option>
                                 <option value="20">20</option>
                                 <option value="25">25</option>
                                 <option value="30">30</option>
@@ -120,7 +128,7 @@ class SignIn extends Component {
                 return <div className='waiting'><section>Loading...</section></div>
             } else {
                 return (
-                    <ListView token={this.state.token} />
+                    <ListView bookCount={this.state.bookCount} token={this.state.token} />
                 )
             }
         }
