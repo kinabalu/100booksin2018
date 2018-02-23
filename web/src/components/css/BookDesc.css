@@ -20,7 +20,10 @@
 :local(.BookInfoTitle){
     grid-area: title;
     font-size: 20px;
-    line-height: 0.95em;
+    line-height: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 :local(.BookInfoPages){
     grid-area: pages;
