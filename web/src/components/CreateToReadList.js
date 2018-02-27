@@ -14,8 +14,8 @@ class CreateToReadList extends Component {
   }
   componentDidMount(){
       var url = Config.apiIp+"/shelf/"+this.props.token+"/to-read";
-
-      console.log(url);
+      var howMany = 0;
+      var onDone = this.props.onDone;
 
       fetch(url)
           .then(res => res.json())
@@ -25,6 +25,7 @@ class CreateToReadList extends Component {
                       isLoaded: true,
                       results: {result}
                   });
+                  howMany = result.result.length
               },
               (error) => {
                   this.setState({
@@ -32,7 +33,9 @@ class CreateToReadList extends Component {
                       error: true
                   });
               }
-          );
+          ).then(() => {
+            onDone(howMany);
+          });
   }
     render(){
       var { error, isLoaded, results } = this.state
@@ -46,7 +49,7 @@ class CreateToReadList extends Component {
       } else {
         return(
           <section id='ListView'>
-              <List bookCount={this.props.bookCount} token={this.props.token} results={results} />
+              <List page={this.props.page} bookCount={this.props.bookCount} token={this.props.token} results={results} />
           </section>
         );
       }

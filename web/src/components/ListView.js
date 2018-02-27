@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CreateReadList from './CreateReadList';
 import CreateToReadList from './CreateToReadList';
+import Paginate from './Paginate';
 import styles from './css/ListView.css';
 import Cookies from 'universal-cookie';
 
@@ -15,11 +16,14 @@ class ListView extends Component{
             bookCount: 15,
             userError: false,
             userErrorMsg: "",
-            page: 0
+            page: 0,
+            shelfCount: null
         }
         this.handleTabClick = this.handleTabClick.bind(this);
         this.logout = this.logout.bind(this);
         this.handleCountChange = this.handleCountChange.bind(this);
+        this.sendBookCount = this.sendBookCount.bind(this);
+        this.handlePageChange = this.handlePageChange.bind(this);
 
         if(this.props.bookCount){
             this.state.bookCount = this.props.bookCount;
@@ -32,7 +36,8 @@ class ListView extends Component{
     }
     handleTabClick(id, e){
       this.setState({
-        shelf: id
+        shelf: id,
+        page: 0,
       })
     }
     handleCountChange(e){
@@ -40,12 +45,13 @@ class ListView extends Component{
             this.setState({
                 bookCount: e.target.value,
                 userError:false,
-                userErrorMsg:""
+                userErrorMsg:"",
+                page: 0,
             })
         } else {
             this.setState({
                 userError: true,
-                userErrorMsg: "Book count must be a number"
+                userErrorMsg: "Book count must be a number",
             });
         }
     }
@@ -53,6 +59,11 @@ class ListView extends Component{
     logout(){
         this.state.cookies.remove("GRUserToken");
         window.location.reload();
+    }
+    sendBookCount(count){
+        this.setState({
+            shelfCount: count
+        })
     }
     render(){
         var { error, isLoaded, submitted, userError, userErrorMsg, shelf } = this.state
@@ -62,14 +73,14 @@ class ListView extends Component{
             preMsg = <div className='error'><section>{userErrorMsg}</section></div>
         }
 
-        if(shelf == 0){
-            shelfElement = <CreateReadList bookCount={this.state.bookCount} token={this.props.token} />
-        } else if(shelf == 1) {
-            shelfElement = <CreateToReadList bookCount={this.state.bookCount} token={this.props.token} />
+        if(shelf === 0){
+            shelfElement = <CreateReadList page={this.state.page} onDone={this.sendBookCount} bookCount={this.state.bookCount} token={this.props.token} />
+        } else if(shelf === 1) {
+            shelfElement = <CreateToReadList page={this.state.page} onDone={this.sendBookCount} bookCount={this.state.bookCount} token={this.props.token} />
         }
 
-        var firstTabSelected = (shelf == 0)? " " + styles.selectedTab:"";
-        var secondTabSelected = (shelf == 1)? " " + styles.selectedTab:"";
+        var firstTabSelected = (shelf === 0)? " " + styles.selectedTab:"";
+        var secondTabSelected = (shelf === 1)? " " + styles.selectedTab:"";
 
         return (
           <div>
@@ -93,7 +104,7 @@ class ListView extends Component{
             {shelfElement}
           </div>
           <footer className="footer">
-
+            <Paginate currentPage={this.state.page} bookCount={this.state.bookCount} shelfCount={this.state.shelfCount} pageChange={this.handlePageChange} />
           </footer>
           </div>
         );
