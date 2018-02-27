@@ -50,7 +50,7 @@ class Paginate extends Component {
             )
             lastPage = (
                 <li className={styles.pageLink} >
-                    <a onClick={() => this.setPage(numberOfPages)}>Last</a>
+                    <a onClick={() => this.setPage(numberOfPages - 1)}>Last</a>
                 </li>
             )
         }
