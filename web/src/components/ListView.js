@@ -68,6 +68,9 @@ class ListView extends Component{
             shelfElement = <CreateToReadList bookCount={this.state.bookCount} token={this.props.token} />
         }
 
+        var firstTabSelected = (shelf == 0)? " " + styles.selectedTab:"";
+        var secondTabSelected = (shelf == 1)? " " + styles.selectedTab:"";
+
         return (
           <div>
           <div className={styles.TabsContainer}>
@@ -82,8 +85,8 @@ class ListView extends Component{
                       <option value="30">30</option>
                   </select>
               </section>
-              <input type="button" className={styles.firstTab + " " + styles.selectedTab} value="read" onClick={this.handleTabClick.bind(this, 0)} />
-              <input type="button" className={styles.secondTab} value="to-read" onClick={this.handleTabClick.bind(this, 1)} />
+              <input type="button" className={styles.firstTab + firstTabSelected} value="read" onClick={this.handleTabClick.bind(this, 0)} />
+              <input type="button" className={styles.secondTab + secondTabSelected} value="to-read" onClick={this.handleTabClick.bind(this, 1)} />
               <input type='button' className={styles.logout} value='Logout' onClick={this.logout.bind(this)} />
             </nav>
             {preMsg}

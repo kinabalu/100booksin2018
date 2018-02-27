@@ -8,7 +8,7 @@ import time
 class Database(object):
     database = 'books'
     host = '172.17.0.4'
-    #host = '172.18.0.2'
+    #host = '172.18.0.4'
     user = 'postgres'
     password = 'police_lama'
     bookCountList = [5, 10, 15, 20, 25, 30, 35] # Going to do this on the client side actually
@@ -27,6 +27,8 @@ class Database(object):
 
     # Open connection and set to autocommit
     def __init__(self):
+        #if(gethostname())
+
         self.connection = psycopg2.connect(database=self.database, host=self.host, user=self.user,
                                            password=self.password)
         self.connection.autocommit = True

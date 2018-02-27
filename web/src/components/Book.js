@@ -23,7 +23,7 @@ class Book extends Component {
 
         var percentProgress = 0
         if(this.props.book.pages_read !== 0){
-            percentProgress = (this.props.book.pages_read / this.props.book.pages) * 100;
+            percentProgress = (this.state.pages / this.props.book.pages) * 100;
         }
         return (
             <div key={this.props.book.bookid} className={styles.Book}>

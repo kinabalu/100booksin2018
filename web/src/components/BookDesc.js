@@ -38,6 +38,8 @@ class BookDesc extends Component {
 
         console.log(url)
 
+        var onDone = this.props.renderNew;
+
         fetch(url)
             .then(res => res.json())
             .then((result) => {
@@ -47,6 +49,7 @@ class BookDesc extends Component {
                         pagesSaved: true,
                         pagesEdited: false
                     })
+                    onDone(newPages);
                 }, (error) => {
                     this.setState({
                         isLoaded: false,
@@ -55,7 +58,6 @@ class BookDesc extends Component {
                         userError: true,
                         userErrorMsg: "Server error"
                     })
-                    alert()
                 })
         this.forceUpdate();
         event.preventDefault();
