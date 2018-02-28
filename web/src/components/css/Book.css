@@ -1,7 +1,13 @@
 :local(.Book){
-    background-color: #444;
-    color: #fff;
+    background-color: #ededed;
+    color: #191919;
     border-radius: 5px;
+    border: 1px solid #d1d1d1;
+    /*box-shadow: 2px 2px 50px 2px #191919;
+    box-shadow: 2px 2px 50px 5px #d1d1d1;*/
+    -webkit-box-shadow: 5px 5px 10px 0px rgba(209,209,209,1);
+    -moz-box-shadow: 5px 5px 10px 0px rgba(209,209,209,1);
+    box-shadow: 5px 5px 10px 0px rgba(209,209,209,1);
     /*height: 188px;*/
 }
 

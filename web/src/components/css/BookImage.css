@@ -1,6 +1,9 @@
 :local(.BookImage){
     height: 180px; /*150, 200*/
     width: 117px; /*98, 130*/
+    -webkit-box-shadow: 5px 5px 10px 0px rgba(209,209,209,1);
+    -moz-box-shadow: 5px 5px 10px 0px rgba(209,209,209,1);
+    box-shadow: 5px 5px 10px 0px rgba(209,209,209,1);
 }
 :local(.BookImageWrap){
     float: left;

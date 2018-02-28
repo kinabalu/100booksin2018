@@ -9,4 +9,18 @@
     grid-gap: 20px;
     grid-template-columns: 1fr 1fr 1fr;
     margin: 10px auto;
+    min-width: 270px;
+}
+
+/* Switch to two-column grid just before the breaking point of a three-column grid */
+@media all and (max-width: 964px) {
+    :local(.BookList){
+        grid-template-columns: 1fr 1fr;
+    }
+}
+/* Switch to one-column grid just before the breaking point of a two-column grid */
+@media all and (max-width: 640px) {
+    :local(.BookList){
+        grid-template-columns: 1fr;
+    }
 }

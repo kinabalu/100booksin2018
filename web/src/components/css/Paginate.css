@@ -1,6 +1,15 @@
-:local(.pagesList){
-
+:local(.pageList){
+    color: #191919;
+    font-size: 2em;
 }
-:local(.pagesLink){
-
+:local(.pageLink){
+    display: inline;
+}
+:local(.pageLink:not(:first-child)) {
+    margin-left: 5px;
+}
+:local(.pageLink a){
+    text-decoration: underline;
+    cursor: pointer;
+    color: #4e77a0;
 }

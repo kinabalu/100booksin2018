@@ -55,7 +55,7 @@ body {
 .wrapper {
 	width: 100%;
 	/*min-width: 500px;*/
-	background-color: #c5cae9ff;
+	/*background-color: #c5cae9ff;*/
 	height: 100%;
 }
 
@@ -63,19 +63,34 @@ body {
 /* Header
 -----------------------------------------------------------------------------*/
 .header {
-	height: 75px;
-	background: #c5cae9ff;
-	background-image: url("header.png");
-	background-repeat: repeat-x;
+	height: 50px;
 }
-.header-image {
+.header-text{
+	/* Sizing */
 	height: 70%;
 	width: 100%;
-	background-image: url("Name.png");
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: auto;
+	min-width: 270px;
+
+	/* Font */
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 45px;
+	text-align: center;
+	padding-top: 20px;
+	color: #191919;
+
+	/* Truncate */
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+/* Make header smaller at 404px when is starts truncating */
+@media all and (max-width: 404px) {
+	.header-text {
+		font-size: 30px;
+	}
+}
+
 
 
 /* Middle
@@ -118,7 +133,7 @@ input {
 -----------------------------------------------------------------------------*/
 .footer {
 	height: 100px;
-	background: #c5cae9ff;
+	/*background: #c5cae9ff;*/
 	text-align: center;
 	padding-top: 10px;
 }
@@ -141,7 +156,7 @@ input {
 .waiting section {
 	margin: auto;
 	width: 150px;
-	border: 5px solid white;
+	border: 2.5px solid #c5cae9ff;
 	border-radius: 5px;
 	text-align: center;
 	padding: 5px 0px;

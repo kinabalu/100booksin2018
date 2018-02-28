@@ -29,7 +29,7 @@
     grid-area: pages;
     margin: 5px 5px;
     font-size: 13px;
-    color: White;
+    color: #191919;
 }
 
 :local(.BookInfoPages form) {
@@ -47,8 +47,8 @@
 :local(.pagesSubmit) {
     width: 20px;
     height: 26px;
-    padding-bottom: 5px;
-    padding-top: 0px;
+    padding-bottom: 5.5px;
+    padding-top: 3px;
     margin-top: 0px;
     text-align: center;
     padding-right: 18px;
@@ -56,6 +56,8 @@
     border-radius: 4px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+
+    background-color: #4e77a0;
 }
 
 @keyframes toyellow {
