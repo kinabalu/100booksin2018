@@ -1,0 +1,41 @@
+version: '3'
+services:
+  react:
+    container_name: "100books-react"
+    image: ctottinger/100books-react:timing
+    ports:
+     - "80:3000"
+    networks:
+      100booksnet:
+        ipv4_address: 172.18.0.9
+  postgres:
+    container_name: "100books-postgres"
+    image: ctottinger/100books-postgres:db
+    ports:
+     - "5432:5432"
+    networks:
+      100booksnet:
+        ipv4_address: 172.18.0.4
+    environment:
+      POSTGRES_PASSWORD: police_lama
+      POSTGRES_USER: postgres
+      POSTGRES_DB: books
+    entrypoint: /bin/bash
+    command: "bash -c \"service postgresql start\""
+  apistar:
+    container_name: "100books-apistar"
+    image: ctottinger/100books-apistar:cors
+    ports:
+     - "8080:8080"
+    networks:
+      100booksnet:
+        ipv4_address: 172.18.0.7
+    command: "apistar run --host 0.0.0.0"
+
+
+networks:
+  100booksnet:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.18.0.0/16

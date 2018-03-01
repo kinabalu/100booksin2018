@@ -17,6 +17,8 @@ class CreateReadList extends Component {
       var howMany = 0;
       var onDone = this.props.onDone;
 
+      console.time("CreateReadList")
+
       fetch(url)
           .then(res => res.json())
           .then(
@@ -35,6 +37,7 @@ class CreateReadList extends Component {
               }
           ).then(() => {
             onDone(howMany);
+            console.timeEnd("CreateReadList");
           });
   }
     render(){

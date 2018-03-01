@@ -1,7 +1,7 @@
 from .fetchlist import fetchList
 from .database import Database
 from .output import outputTrue, outputFalse, outputFailure, outputSuccess
-import requests
+from datetime import datetime
 
 
 # Get list of books on a shelf
@@ -39,6 +39,7 @@ def setReadStatus(pagesread=None, bookid=None, token=None):
 
  # Returns token of user. If the user doesn't already exist in database, creates a new user/token
 def logIn(grid=None):
+    startTime=datetime.now()
     if grid is None:
         return outputFailure(failMessage="Must supply GoodReads ID")
     try:
@@ -54,9 +55,10 @@ def logIn(grid=None):
         # User exists, assign it a new token
         token = connection.newToken(grid)
     connection.close()
-
+    totalTime = (datetime.now() - startTime)
     return outputSuccess(results={
-        "token": token
+        "token": token,
+        "time": totalTime.__str__()
     })
 
 

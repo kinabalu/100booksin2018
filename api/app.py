@@ -1,6 +1,7 @@
 from apistar import Route
 from apistar.frameworks.wsgi import WSGIApp as App
 from project.views import setReadStatus, getList, logIn, tokenValid, _testPagesRead
+from wsgicors import CORS
 
 routes = [
     # Get shelf lists
@@ -19,4 +20,12 @@ routes = [
     Route('/testpagesread/{token}/{bookid}/', 'GET', _testPagesRead),
 ]
 
-app = App(routes=routes)
+class CORSApp(App):
+    def __call__(self, environ, start_response):
+        cors = CORS(super().__call__, headers='*', methods='*', maxage='180', origin='*')
+        return cors(environ, start_response)
+
+
+
+app = CORSApp(routes=routes)
+#app = App(routes=routes)

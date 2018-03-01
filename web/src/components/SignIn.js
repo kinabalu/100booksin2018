@@ -66,6 +66,7 @@ class SignIn extends Component {
         var url = Config.apiIp+"/user/"+this.state.value
 
         console.log(url);
+        console.time("Signin");
 
         fetch(url)
             .then(res => res.json())
@@ -76,6 +77,7 @@ class SignIn extends Component {
                         token: result.result.token
                     });
                     this.state.cookies.set("GRUserToken", result.result.token, {path: '/'})
+                    console.log("Server took: " + result.result.time);
                 },
                 (error) => {
                     this.setState({
@@ -84,8 +86,9 @@ class SignIn extends Component {
                         data: error
                     });
                 }
-            );
-
+            ).then(()=>{
+                console.timeEnd("Signin");
+            });
         event.preventDefault();
     }
     render(){
